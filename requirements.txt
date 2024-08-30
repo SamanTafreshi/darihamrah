@@ -1,0 +1,13 @@
+
+# Framework
+plotly==5.23.0
+dash==2.17.1
+
+# queue manager
+celery==5.3.6  # require Install "erlang" and "rabbitmq"
+flower==2.0.1
+##eventlet==0.35.2
+
+# data analyse
+numpy==2.1.0
+pandas==2.2.2
