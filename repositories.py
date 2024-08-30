@@ -19,25 +19,19 @@ def amazon_csv(filter_name=None):
     if filter_name_json:
         # Directly interact with the cache to get the DataFrame CSV string
         df_csv_str = get_cached_dataframe(filter_name_json)
-        print(f'df_csv_str ################## {df_csv_str}')
 
     # Check if the DataFrame CSV string is found in the cache
     if df_csv_str:
         df = pd.read_csv(StringIO(df_csv_str.decode('utf-8')))
-        print('DataFrame found in cache and matches the filter.')
     else:
         # Call get_csv() only if the DataFrame is not found in the cache
         df = get_csv()
         df = df[["name", "discount_price", "actual_price", "date"]]
-        print('Generated new DataFrame.')
 
         if filter_name:
             df = df[df["name"].isin(filter_name)]
-            print(f'Filtered DataFrame with filter_name {filter_name}:')
-            print(df['name'].head())
             # Store the filtered DataFrame in the cache using filter_name as the key
             cache_dataframe.apply_async(args=[filter_name_json], kwargs={'df_csv_str': df.to_csv(index=False)})
-            print(f'DataFrame stored in cache with filter_name_json key: {filter_name_json}')
 
     if df.empty:
         raise ValueError(f"No data available after filtering with filter_name: {filter_name}")
